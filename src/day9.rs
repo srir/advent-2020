@@ -31,12 +31,8 @@ fn first_not_matching(inputs: &Vec<usize>) -> usize {
 
 fn contiguous_subsequence_sum(inputs: &Vec<usize>, target: usize) -> Option<&[usize]> {
     for (i, _) in inputs.iter().enumerate() {
-        for (j, _) in inputs.iter().enumerate() {
-            if j < i+1 {
-                continue;
-            }
-
-            let subseq = inputs.get(i..j).unwrap();
+        for (j, _) in inputs.iter().enumerate().skip(i) {
+            let subseq = &inputs[i..j];
 
             if subseq.iter().sum::<usize>() == target {
                 return Some(subseq)
