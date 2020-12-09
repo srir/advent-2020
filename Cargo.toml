@@ -7,11 +7,7 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-
-[[bin]]
-name = "01"
-path = "src/01/main.rs"
-
-[[bin]]
-name = "02"
-path = "src/02/main.rs"
+"aoc-runner" = "0.3.0"
+"aoc-runner-derive" = "0.3.0"
+"regex" = "1"
+"itertools" = "0.9"

@@ -1,4 +1,9 @@
-use std::{io, io::prelude::*};
+use aoc_runner_derive::{aoc, aoc_generator};
+
+#[aoc_generator(day1)]
+fn split_to_numbers(str: &str) -> Vec<u32> {
+    str.lines().map(|line| line.parse().unwrap()).collect()
+}
 
 fn mult_matches(matches: Vec<Vec<u32>>) -> u128 {
     matches
@@ -8,6 +13,7 @@ fn mult_matches(matches: Vec<Vec<u32>>) -> u128 {
         .unwrap()
 }
 
+#[aoc(day1, part1)]
 fn two_elem_sum(nums: &Vec<u32>) -> u128 {
     let mut results = Vec::new();
 
@@ -22,6 +28,7 @@ fn two_elem_sum(nums: &Vec<u32>) -> u128 {
     mult_matches(results)
 }
 
+#[aoc(day1, part2)]
 fn three_elem_sum(nums: &Vec<u32>) -> u128 {
     let mut results = Vec::new();
 
@@ -38,14 +45,3 @@ fn three_elem_sum(nums: &Vec<u32>) -> u128 {
     mult_matches(results)
 }
 
-fn main() -> io::Result<()> {
-    let nums: Vec<u32> = io::stdin().lock().lines().filter_map(|line| line.ok()?.parse().ok()).collect();
-
-    let two_elem = two_elem_sum(&nums);
-    println!("{}", two_elem);
-
-    let three_elem = three_elem_sum(&nums);
-    println!("{}", three_elem);
-
-    Ok(())
-}

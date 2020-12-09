@@ -1,4 +1,5 @@
-use std::{io, io::prelude::*};
+use aoc_runner_derive::{aoc, aoc_generator};
+use std::io;
 use std::str::FromStr;
 
 #[derive(Debug, Copy, Clone)]
@@ -57,11 +58,22 @@ fn parse_line(line: String) -> (PasswordPolicy, String) {
     (PasswordPolicy::from_str(tokens[0]).unwrap(), tokens[1].to_string())
 }
 
+#[aoc_generator(day2, part1)]
+fn split_to_password_policy_pairs(str: &str) -> Vec<(PasswordPolicy, String)> {
+    str.lines().map(|line| parse_line(line.to_string())).collect()
+}
+
 fn parse_line_2(line: String) -> (PasswordPolicy2, String) {
     let tokens: Vec<&str> = line.split(": ").collect();
 
     (PasswordPolicy2::from_str(tokens[0]).unwrap(), tokens[1].to_string())
 }
+
+#[aoc_generator(day2, part2)]
+fn split_to_password_policy_pairs_2(str: &str) -> Vec<(PasswordPolicy2, String)> {
+    str.lines().map(|line| parse_line_2(line.to_string())).collect()
+}
+
 
 fn validate_password(policy: PasswordPolicy, password: String) -> bool {
     let count = password.chars().fold(0, |acc, char| {
@@ -71,6 +83,14 @@ fn validate_password(policy: PasswordPolicy, password: String) -> bool {
     count >= policy.min_times && count <= policy.max_times
 }
 
+#[aoc(day2, part1)]
+fn count_valid_passwords(policy_password_pairs: &Vec<(PasswordPolicy, String)>) -> u64 {
+    policy_password_pairs.iter()
+        .filter(|(policy, password)| validate_password(policy.clone(), password.to_string()))
+        .count() as u64
+}
+
+
 fn validate_password_2(policy: PasswordPolicy2, password: String) -> bool {
     let password_bytes = password.as_bytes();
 
@@ -78,29 +98,24 @@ fn validate_password_2(policy: PasswordPolicy2, password: String) -> bool {
         ^ (password_bytes[policy.second_pos - 1] as char  == policy.letter)
 }
 
-fn count_valid_passwords(policy_password_pairs: Vec<(PasswordPolicy, String)>) -> u64 {
-    policy_password_pairs.iter()
-        .filter(|(policy, password)| validate_password(policy.clone(), password.to_string()))
-        .count() as u64
-}
-
-fn count_valid_passwords_2(policy_password_pairs: Vec<(PasswordPolicy2, String)>) -> u64 {
+#[aoc(day2, part2)]
+fn count_valid_passwords_2(policy_password_pairs: &Vec<(PasswordPolicy2, String)>) -> u64 {
     policy_password_pairs.iter()
         .filter(|(policy, password)| validate_password_2(policy.clone(), password.to_string()))
         .count() as u64
 }
-
-fn main() -> io::Result<()> {
-    let policy_password_pairs_2: Vec<(PasswordPolicy2, String)> = io::stdin().lock().lines().filter_map(|line| {
-        match line {
-            Err(_) => None,
-            Ok(line) => Some(parse_line_2(line))
-        }
-    }).collect();
-
-    let valid_count = count_valid_passwords_2(policy_password_pairs_2);
-
-    println!("{}", valid_count);
-
-    Ok(())
-}
+//
+// fn main() -> io::Result<()> {
+//     let policy_password_pairs_2: Vec<(PasswordPolicy2, String)> = io::stdin().lock().lines().filter_map(|line| {
+//         match line {
+//             Err(_) => None,
+//             Ok(line) => Some(parse_line_2(line))
+//         }
+//     }).collect();
+//
+//     let valid_count = count_valid_passwords_2(policy_password_pairs_2);
+//
+//     println!("{}", valid_count);
+//
+//     Ok(())
+// }
