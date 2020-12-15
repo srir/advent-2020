@@ -17,9 +17,8 @@ fn value_at_iteration(input: &Vec<usize>, iteration: usize) -> usize {
             let prev_turns =
                 previous_turns.entry(last_value.unwrap()).or_insert(vec![]).as_slice();
             Some(match prev_turns {
-                None | Some([_]) => 0,
-                Some([.., prev_turn, last_turn]) => last_turn - prev_turn,
-                _ => unreachable!("nope")
+                [] | [_] => 0,
+                [.., prev_turn, last_turn] => last_turn - prev_turn,
             })
         };
 
