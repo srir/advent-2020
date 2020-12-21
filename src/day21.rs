@@ -111,10 +111,10 @@ fn canonical_dangerous_ingredient_list(foods: &Data) -> String {
 
     while let Some((a, i)) = _find_next_minimal(&allergen_candidates_map) {
         allergen_ingredients.insert(a.clone(), i.clone());
-        allergen_candidates_map.remove(&*a);
+        allergen_candidates_map.remove(a.as_str());
 
         for (_, candidates) in allergen_candidates_map.iter_mut() {
-            candidates.remove(&*i);
+            candidates.remove(i.as_str());
         }
     }
 
