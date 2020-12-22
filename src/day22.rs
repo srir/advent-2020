@@ -128,8 +128,8 @@ impl RecursiveCombat {
             ([p1, p1_deck @ ..], [p2, p2_deck @ ..]) => {
                 if p1_deck.len() >= *p1 && p2_deck.len() >= *p2 {
                     Some(RecursiveCombat::new_with_depth(
-                        p1_deck.to_vec(),
-                        p2_deck.to_vec(),
+                        p1_deck.iter().take(*p1).cloned().collect(),
+                        p2_deck.iter().take(*p2).cloned().collect(),
                         self.game_depth + 1
                     ))
                 } else {
@@ -159,14 +159,8 @@ impl Game for RecursiveCombat {
     // -> Winner
     fn play_game(&mut self) -> Player {
         while self.game_status() == Status::InProgress {
-            println!("Depth {} round, {:?} vs {:?}", self.game_depth, self.player1, self.player2);
-
-            let round_result = self.play_round();
-
-            // println!("> played round {}, => {:?}", round_count, round_result);
+            self.play_round();
         }
-
-        println!("Depth {} game done! player1: {:?}, player2: {:?}", self.game_depth, self.player1, self.player2);
 
         match self.game_status() {
             Status::InProgress => unreachable!("unexpected in progress game"),
@@ -184,8 +178,6 @@ impl Game for RecursiveCombat {
 
     fn play_round(&mut self) -> Status {
         let this_round = (self.player1.clone(), self.player2.clone());
-
-        // println!("player1: {:?}, player2: {:?}", self.player1, self.player2);
 
         if self.previous_rounds.contains(&this_round) {
             Status::Won(Player::Player1)
